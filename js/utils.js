@@ -61,16 +61,6 @@ function hide(element) {
   element.hidden = !element.hidden;
 }
 
-function getFavicon(url) {
-  if (!isValidUrl(url)) return null
-
-  const domain = new URL(url).hostname;
-  if (domain === "cipher8800.github.io") {
-    return `${url}/favicon.png`
-  }
-  return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
-}
-
 function isValidUrl(value) {
   try {
     new URL(value);

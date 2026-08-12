@@ -103,7 +103,20 @@ function displayItems(items) {
 }
 
 function getItemIcon(item) {
-  let icon = item.icon || (item.url && getFavicon(item.url)) || `assets/images/${item.type}.png`;
+  const icon = item.icon || `assets/images/${item.type}.png`;
+
+  if (item.url) {
+    if (!isValidUrl(item.url)) return icon;
+
+    const newUrl = new URL(item.url);
+    if (newUrl.hostname === "cipher8800.github.io") {
+      return `${item.url}/favicon.png`;
+    } else if (!newUrl.hostname || newUrl.hostname === "127.0.0.1") {
+      return icon;
+    } else {
+      return `https://www.google.com/s2/favicons?domain=${newUrl.hostname}&sz=128`;
+    }
+  }
 
   return icon;
 }

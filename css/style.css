@@ -1,0 +1,544 @@
+@font-face {
+  font-family: "Poppins";
+  src: url("../assets/fonts/Poppins-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("../assets/fonts/Poppins-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("../assets/fonts/Poppins-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  --bg-color: #ffffff;
+  --text-color: #333;
+  --border-color: rgba(0, 0, 0, 0.5);
+  --label-color: #eee;
+  --red: #f44336;
+  --green: #4caf50;
+  --blue: #3f51b5;
+  --lightblue: #2196f3;
+  --overlay-gradient: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5));
+}
+
+.dark-theme {
+  --bg-color: #222;
+  --text-color: #eee;
+  --border-color: rgba(255, 255, 255, 0.5);
+  --label-color: #333;
+  --overlay-gradient: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  border: none;
+  text-decoration: none;
+  line-height: 1;
+}
+
+button {
+  cursor: pointer;
+}
+
+.button {
+  display: inline-block;
+  padding: 8px 16px;
+  background: var(--green);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.truncated {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hidden {
+  display: none !important;
+}
+
+textarea {
+  padding: 5px;
+  background-color: var(--label-color);
+  color: var(--text-color);
+  border-radius: 5px;
+  overflow: auto;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.modal .modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  max-width: calc(100% - 20px);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+}
+
+.modal .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0;
+  background-color: transparent;
+  color: var(--text-color);
+}
+
+.modal .actions {
+  display: flex;
+  gap: 5px;
+}
+
+.modal .actions > * {
+  flex: 1;
+}
+
+.modal .delete {
+  background-color: var(--red);
+}
+
+.modal .input-group {
+  display: flex;
+  gap: 10px;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.container {
+  max-width: 1440px;
+  margin: auto;
+}
+
+.app {
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.header {
+  position: relative;
+  color: white;
+  padding: 10px;
+}
+
+.header .main-bar {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--text-color);
+}
+
+.header .actions {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.header .actions > button {
+  font-size: 1.5rem;
+  padding: 0;
+  background-color: transparent;
+  color: white;
+}
+
+.header .search-btn {
+  display: none;
+}
+
+.search-box {
+  display: inline-flex;
+  width: 250px;
+  height: min-content;
+  padding: 5px 10px;
+  background-color: white;
+  color: #333;
+  border-radius: 50px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-box input {
+  flex: 1;
+  padding: 0;
+  border: none;
+  color: #333;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0 10px;
+}
+
+.clock {
+  font-size: 3rem;
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  gap: 5px;
+  cursor: pointer;
+  padding: 5px 0;
+  height: min-content;
+  max-width: 100%;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.breadcrumbs * {
+  background-color: transparent;
+  color: var(--text-color);
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.search-bar {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.search-bar .exit,
+.search-bar .clear {
+  font-size: 1.5rem;
+  background-color: transparent;
+  color: white;
+}
+
+.search-bar .search-box {
+  flex: 1;
+}
+
+.action-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.action-bar > * {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: transparent;
+  color: var(--text-color);
+  font-size: 1.75rem;
+  cursor: pointer;
+}
+
+.item-container {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 5px;
+}
+
+.item-container > .message {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.item-container .item {
+  padding: 5px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  height: max-content;
+}
+
+.item-container .item.selected {
+  border-color: var(--border-color);
+}
+
+.item-container .item * {
+  position: relative;
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+.item-container .item img {
+  max-height: 100px;
+  object-fit: contain;
+}
+
+.item-container .item p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.8rem;
+  max-height: 40px;
+  text-align: center;
+}
+
+.item-modal .name-input {
+  flex: 1;
+  background-color: transparent;
+  color: var(--text-color);
+}
+
+.item-modal .icon-input {
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.item-modal .icon-input img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.item-modal .url-input {
+  padding: 5px;
+  background-color: transparent;
+  color: var(--text-color);
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.item-modal .content-input {
+  resize: none;
+  height: 225px;
+  font-size: 1rem;
+}
+
+.folder-modal .icon-input {
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.folder-modal .icon-input img {
+  width: 32px;
+  height: 32px;
+}
+
+.toast-container {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 10px;
+}
+
+.toast {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 5px;
+  width: max-content;
+  max-width: 100%;
+}
+
+/* Settings panel */
+.settings-modal .modal-content {
+  transform: none;
+  top: 50px;
+  left: auto;
+  right: 50px;
+  gap: 5px;
+  width: 300px;
+}
+
+/* Header */
+.settings-header {
+  padding: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.settings-title {
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.settings-subtitle {
+  opacity: 0.8;
+  margin-top: 5px;
+  font-size: 13px;
+}
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: #444;
+}
+
+/* Menu item */
+.settings-item {
+  min-height: 48px;
+
+  padding: 0 16px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  transition: background 0.1s;
+}
+
+.settings-item:hover {
+  background: var(--label-color);
+}
+
+.settings-item .bi {
+  font-size: 1.5rem;
+}
+
+.settings-label {
+  flex: 1;
+}
+
+.settings-description {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #aaa;
+
+  font-size: 12px;
+}
+
+.settings-item .arrow {
+  color: #aaa;
+  font-size: 22px;
+}
+
+/* Toggle */
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.toggle input {
+  display: none;
+}
+
+.toggle .slider {
+  position: absolute;
+  inset: 0;
+  background: #ccc;
+  border-radius: 26px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.toggle .slider::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.toggle input:checked + .slider {
+  background: #2196f3;
+}
+
+.toggle input:checked + .slider::before {
+  transform: translateX(24px);
+}
+
+/* Medium screens (Tablets, up to 768px wide) */
+@media (max-width: 768px) {
+  .settings-modal .modal-content {
+    right: 20px;
+  }
+}
+
+/* Small screens (Phones, up to 480px wide) */
+@media (max-width: 480px) {
+  .header .title {
+    font-size: 1.5rem;
+  }
+
+  .header .actions .search-box {
+    display: none;
+  }
+
+  .header .search-btn {
+    display: inline-flex;
+  }
+
+  .header.search .main-bar {
+    display: none;
+  }
+
+  .header.search .search-bar {
+    display: flex;
+  }
+
+  .action-bar .sort {
+    display: none;
+  }
+
+  .settings-modal .modal-content {
+    bottom: auto;
+    top: 50px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: 100%;
+  }
+}

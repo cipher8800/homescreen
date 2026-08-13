@@ -2,7 +2,7 @@ const ItemModal = (() => {
   const element = document.querySelector(".item-modal");
   const title = element.querySelector(".title");
   const nameInput = element.querySelector(".name-input");
-  const urlInput = element.querySelector(".url-input")
+  const urlInput = element.querySelector(".url-input");
   const contentInput = element.querySelector(".content-input");
   const iconInput = element.querySelector(".icon-input input");
   const iconPreview = element.querySelector(".icon-input img");
@@ -10,7 +10,7 @@ const ItemModal = (() => {
   const deleteBtn = element.querySelector(".delete");
 
   let currentItem = null;
-  let currentItemType = "text"
+  let currentItemType = "text";
 
   iconInput.oninput = (event) => {
     const file = event.target.files[0];
@@ -23,7 +23,7 @@ const ItemModal = (() => {
   async function createItemData(item = {}) {
     const itemData = {
       id: item.id || generateId(),
-      index: currentItems.length,
+      order: currentItems.reduce((max, item) => Math.max(max, item.order), 0) + 1,
       name: nameInput.value,
       type: item.type || currentItemType,
       parentId: item.parentId || currentFolder.id,
@@ -37,26 +37,26 @@ const ItemModal = (() => {
   }
 
   function openCreate(itemType = "text") {
-    currentItemType = itemType
-    update()
+    currentItemType = itemType;
+    update();
     open();
   }
 
   function openUpdate(itemId) {
     const item = getItem(itemId);
     currentItem = item;
-    update()
+    update();
     open();
   }
 
   function update() {
-    const itemType = currentItem?.type || currentItemType || "text"
+    const itemType = currentItem?.type || currentItemType || "text";
     iconInput.value = "";
     iconPreview.src = currentItem?.icon || `assets/images/${itemType}.png`;
     title.textContent = currentItem ? `Edit ${currentItem.name}` : `Create new ${itemType}`;
     nameInput.value = currentItem ? currentItem.name : createItemName(`New ${itemType}`);
-    urlInput.classList.toggle("hidden", itemType !== "shortcut")
-    urlInput.value = currentItem ? currentItem.url : ""
+    urlInput.classList.toggle("hidden", itemType !== "shortcut");
+    urlInput.value = currentItem ? currentItem.url : "";
     contentInput.classList.toggle("hidden", itemType !== "text");
     contentInput.value = currentItem ? currentItem.content : "";
 

@@ -40,7 +40,6 @@ function createItem(itemData) {
   selectedItem = itemData.id;
   displayItems();
   Toast.show("Item has been successfully created");
-  console.log(itemData)
 }
 
 function updateItem(itemId, updates) {
@@ -70,7 +69,7 @@ async function deleteItem(itemId = selectedItem) {
 }
 
 function sortItems(items) {
-  return [...items].sort((a, b) => a.index - b.index);
+  return [...items].sort((a, b) => a.order - b.order);
 }
 
 function displayItems(items) {
@@ -261,16 +260,18 @@ function toggleSettingsModal() {
 }
 
 function moveItem(direction = 1) {
-  const itemToMove = currentItems.find(item => item.id === selectedItem)
-  const adjacentItem = currentItems.find (item => item.index === itemToMove.index + direction)
+  const sorted = sortItems(currentItems)
+  const selected = sorted.find(item => item.id === selectedItem)
+  const target = sorted[sorted.indexOf(selected) + direction]
 
-  if (!itemToMove || !adjacentItem) return
+  if (!selected || !target) return
 
-  itemToMove.index = itemToMove.index + direction
-  adjacentItem.index = adjacentItem.index - direction
+  const order = selected.order
+  selected.order = target.order
+  target.order = order
 
-  DB.putItem("currentItems", itemToMove)
-  DB.putItem("currentItems", adjacentItem)
+  DB.putItem("currentItems", selected)
+  DB.putItem("currentItems", target)
 
   displayItems()
 }

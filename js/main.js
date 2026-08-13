@@ -9,7 +9,6 @@ let currentItems = null;
 let currentFolder = rootFolder;
 let darkTheme = load("darkTheme", true);
 let selectedItem = null;
-let shouldSortByName = load("shouldSortByName", false);
 let currentWallpaper = null;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -41,6 +40,7 @@ function createItem(itemData) {
   selectedItem = itemData.id;
   displayItems();
   Toast.show("Item has been successfully created");
+  console.log(itemData)
 }
 
 function updateItem(itemId, updates) {
@@ -70,18 +70,7 @@ async function deleteItem(itemId = selectedItem) {
 }
 
 function sortItems(items) {
-  if (shouldSortByName) items.sort((a, b) => a.name.localeCompare(b.name));
-  else items.sort((a, b) => b.lastModified - a.lastModified);
-
-  const sortedItems = [...items.filter((item) => item.type === "folder"), ...items.filter((item) => item.type === "shortcut" || item.type === "text")];
-
-  return sortedItems;
-}
-
-function toggleSort() {
-  shouldSortByName = !shouldSortByName;
-  save("shouldSortByName", shouldSortByName);
-  displayItems();
+  return [...items].sort((a, b) => a.index - b.index);
 }
 
 function displayItems(items) {
@@ -269,4 +258,19 @@ async function importData(file) {
 
 function toggleSettingsModal() {
   hide(settingsModal);
+}
+
+function moveItem(direction = 1) {
+  const itemToMove = currentItems.find(item => item.id === selectedItem)
+  const adjacentItem = currentItems.find (item => item.index === itemToMove.index + direction)
+
+  if (!itemToMove || !adjacentItem) return
+
+  itemToMove.index = itemToMove.index + direction
+  adjacentItem.index = adjacentItem.index - direction
+
+  DB.putItem("currentItems", itemToMove)
+  DB.putItem("currentItems", adjacentItem)
+
+  displayItems()
 }

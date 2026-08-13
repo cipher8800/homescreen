@@ -23,6 +23,7 @@ const ItemModal = (() => {
   async function createItemData(item = {}) {
     const itemData = {
       id: item.id || generateId(),
+      index: currentItems.length,
       name: nameInput.value,
       type: item.type || currentItemType,
       parentId: item.parentId || currentFolder.id,

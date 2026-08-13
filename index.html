@@ -73,8 +73,11 @@
           <button class="delete" onclick="deleteItem()">
             <i class="bi bi-trash"></i>
           </button>
-          <label class="sort" onclick="toggleSort()">
-            <i class="bi bi-sort-down"></i>
+          <label class="move-left s-hidden" onclick="moveItem(-1)">
+            <i class="bi bi-caret-left-square"></i>
+          </label>
+          <label class="move-right s-hidden" onclick="moveItem(1)">
+            <i class="bi bi-caret-right-square"></i>
           </label>
         </div>
 

@@ -98,7 +98,7 @@ function getItemIcon(item) {
     if (!isValidUrl(item.url)) return icon;
 
     const newUrl = new URL(item.url);
-    if (newUrl.hostname === "cipher8800.github.io") {
+    if (newUrl.hostname === "cipher8800.github.io" || newUrl.hostname === "fenixrose84.github.io") {
       return `${item.url}/favicon.png`;
     } else if (!newUrl.hostname || newUrl.hostname === "127.0.0.1") {
       return icon;

@@ -54,18 +54,20 @@ function updateItem(itemId, updates) {
 }
 
 async function deleteItem(itemId = selectedItem) {
-  if (!itemId) return;
+  if (!itemId) return false;
 
   const item = currentItems.find((item) => item.id === itemId);
 
   const confirmed = await ConfirmModal.confirmAction(`Delete "${item.name}"?`, "This action cannot be undone.");
-  if (!confirmed) return;
+  if (!confirmed) return false;
 
   currentItems = currentItems.filter((item) => !(item.id === itemId || item.path.some((item) => item.id === itemId)));
   deselectItem();
   DB.deleteItem("currentItems", itemId);
   displayItems();
   Toast.show("Item has been successfully deleted");
+
+  return true
 }
 
 function sortItems(items) {
@@ -172,6 +174,10 @@ function toggleTheme(force = undefined) {
 
 function displayBreadcrumbs() {
   breadcrumbs.innerHTML = "";
+  const isRoot = currentFolder.path.length <= 0
+  breadcrumbs.style.visibility = isRoot ? "hidden" : "";
+  if (isRoot) return
+
   breadcrumbs.innerHTML += currentFolder.path
     .map(
       (route) => `
@@ -197,7 +203,7 @@ async function changeWallpaper(file) {
 
 function updateWallpaper() {
   if (!currentWallpaper) return;
-  document.querySelector(".app").style.background = `
+  document.body.style.background = `
     var(--overlay-gradient),
     url("${URL.createObjectURL(currentWallpaper)}")
     center / cover no-repeat

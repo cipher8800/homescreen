@@ -77,9 +77,9 @@ const ItemModal = (() => {
     close();
   }
 
-  function handleDelete() {
-    deleteItem(currentItem.id);
-    close();
+  async function handleDelete() {
+    const deleted = await deleteItem(currentItem.id);
+    if (deleted) close();
   }
 
   function open() {

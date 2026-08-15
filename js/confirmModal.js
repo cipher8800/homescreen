@@ -2,30 +2,25 @@ const ConfirmModal = (() => {
   const element = document.querySelector(".confirm-modal");
   const titleEl = element.querySelector(".title");
   const msgEl = element.querySelector(".msg");
-  const confirmBtn = element.querySelector(".confirm");
-  const cancelBtn = element.querySelector(".cancel");
+  let resolveConfirm = null;
 
   function confirmAction(title, message) {
     return new Promise((resolve) => {
       titleEl.textContent = title;
       msgEl.textContent = message;
+      element.hidden = false;
 
-      element.hidden = false
-
-      confirmBtn.onclick = () => {
-        close();
-        resolve(true);
-      };
-
-      cancelBtn.onclick = () => {
-        close();
-        resolve(false);
-      };
+      resolveConfirm = resolve;
     });
   }
 
-  function close() {
-    element.hidden = true
+  function close(result = false) {
+    element.hidden = true;
+
+    const resolve = resolveConfirm;
+    resolveConfirm = null;
+
+    if (resolve) resolve(result);
   }
 
   return { confirmAction, close };

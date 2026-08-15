@@ -115,61 +115,63 @@
 
         <!-- Settings modal -->
         <div class="settings-modal modal" hidden onclick="hide(this)">
-          <div class="modal-content" onclick="stopPropagation(event)">
-            <button class="close" onclick="toggleSettingsModal()">
-              <i class="bi bi-x-lg"></i>
-            </button>
-            <div class="settings-header">
-              <div class="settings-title">Settings</div>
-              <div class="settings-subtitle">Customize your experience</div>
-            </div>
-
-            <label class="settings-item">
-              <i class="bi bi-image"></i>
-              
-              <div class="settings-label">
-                Wallpaper
-                <span class="settings-description"> Change your background </span>
+          <div class="container">
+            <div class="modal-content" onclick="stopPropagation(event)">
+              <button class="close" onclick="toggleSettingsModal()">
+                <i class="bi bi-x-lg"></i>
+              </button>
+              <div class="settings-header">
+                <div class="settings-title">Settings</div>
+                <div class="settings-subtitle">Customize your experience</div>
               </div>
 
-              <div class="arrow">›</div>
-              <input type="file" accept="image/*" hidden onchange="changeWallpaper(this.files[0])" />
-            </label>
+              <label class="settings-item">
+                <i class="bi bi-image"></i>
 
-            <label class="settings-item">
-              <i class="bi bi-moon"></i>
+                <div class="settings-label">
+                  Wallpaper
+                  <span class="settings-description"> Change your background </span>
+                </div>
 
-              <div class="settings-label">
-                Dark theme
-                <span class="settings-description theme-desc" id="themeText"> Enabled </span>
-              </div>
-
-              <label class="toggle">
-                <input class="theme-checkbox" type="checkbox" onchange="toggleTheme()" />
-                <span class="slider"></span>
+                <div class="arrow">›</div>
+                <input type="file" accept="image/*" hidden onchange="changeWallpaper(this.files[0])" />
               </label>
-            </label>
 
-            <label class="settings-item import">
-              <i class="bi bi-box-arrow-in-down"></i>
-              
-              <div class="settings-label">
-                Import
-                <span class="settings-description"> Load your saved items </span>
+              <label class="settings-item">
+                <i class="bi bi-moon"></i>
+
+                <div class="settings-label">
+                  Dark theme
+                  <span class="settings-description theme-desc" id="themeText"> Enabled </span>
+                </div>
+
+                <label class="toggle">
+                  <input class="theme-checkbox" type="checkbox" onchange="toggleTheme()" />
+                  <span class="slider"></span>
+                </label>
+              </label>
+
+              <label class="settings-item import">
+                <i class="bi bi-box-arrow-in-down"></i>
+
+                <div class="settings-label">
+                  Import
+                  <span class="settings-description"> Load your saved items </span>
+                </div>
+
+                <div class="arrow">›</div>
+                <input type="file" accept=".json" hidden onchange="importData(this.files[0])" />
+              </label>
+
+              <div class="settings-item export" onclick="exportData()">
+                <i class="bi bi-box-arrow-up"></i>
+                <div class="settings-label">
+                  Export
+                  <span class="settings-description"> Save your items </span>
+                </div>
+
+                <div class="arrow">›</div>
               </div>
-
-              <div class="arrow">›</div>
-              <input type="file" accept=".json" hidden onchange="importData(this.files[0])" />
-            </label>
-
-            <div class="settings-item export" onclick="exportData()">
-              <i class="bi bi-box-arrow-up"></i>
-              <div class="settings-label">
-                Export
-                <span class="settings-description"> Save your items </span>
-              </div>
-
-              <div class="arrow">›</div>
             </div>
           </div>
         </div>
@@ -181,10 +183,10 @@
             </button>
             <div class="title">Delete item</div>
             <div class="msg">Are you sure you want to delete "item"</div>
-            
+
             <div class="actions">
-              <button class="button confirm">Confirm</button>
               <button class="button cancel" onclick="ConfirmModal.close()">Cancel</button>
+              <button class="button confirm" onclick="ConfirmModal.close(true)">Confirm</button>
             </div>
           </div>
         </div>

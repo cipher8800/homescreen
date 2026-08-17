@@ -8,14 +8,14 @@ const ConfirmModal = (() => {
     return new Promise((resolve) => {
       titleEl.textContent = title;
       msgEl.textContent = message;
-      element.hidden = false;
+      element.classList.toggle("hidden", false);
 
       resolveConfirm = resolve;
     });
   }
 
   function close(result = false) {
-    element.hidden = true;
+    element.classList.toggle("hidden", true);
 
     const resolve = resolveConfirm;
     resolveConfirm = null;

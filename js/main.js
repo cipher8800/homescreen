@@ -2,6 +2,7 @@ const header = document.querySelector("body .header");
 const clockEl = document.querySelector(".clock");
 const itemContainer = document.querySelector(".item-container");
 const breadcrumbs = document.querySelector(".breadcrumbs");
+const actionsModal = document.querySelector(".actions-modal");
 const settingsModal = document.querySelector(".settings-modal");
 
 const rootFolder = { id: null, name: "Root", path: [] };
@@ -145,6 +146,18 @@ function deselectItem() {
   selectedItem = null;
 }
 
+function selectAdjacentItem(direction = 1) {
+  const sorted = sortItems(currentItems)
+  if (!selectedItem) selectedItem = sorted[0].id
+
+  const index = sorted.findIndex(item => item.id === selectedItem);
+
+  const item = sorted[index + direction]
+  if (!item) return
+
+  selectItem(item.id)
+}
+
 function editItem() {
   if (!selectedItem) return;
   ItemModal.openUpdate(selectedItem);
@@ -261,8 +274,12 @@ async function importData(file) {
   update();
 }
 
+function toggleActionsModal() {
+  toggleHide(actionsModal);
+}
+
 function toggleSettingsModal() {
-  hide(settingsModal);
+  toggleHide(settingsModal);
 }
 
 function moveItem(direction = 1) {
@@ -281,3 +298,18 @@ function moveItem(direction = 1) {
 
   displayItems()
 }
+
+
+const keyActions = {
+  KeyF: toggleFullscreen,
+  ArrowLeft: () => selectAdjacentItem(-1),
+  ArrowRight: () => selectAdjacentItem(1),
+};
+
+document.addEventListener("keydown", (event) => {
+  const action = keyActions[event.code];
+  if (action) {
+    event.preventDefault();
+    action();
+  }
+});

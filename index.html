@@ -19,8 +19,8 @@
   </head>
   <body>
     <div class="app container">
-      <header class="header">
-        <div class="main-bar">
+      <header class="navbar">
+        <div class="main-content">
           <h1 class="title">Homescreen</h1>
 
           <div class="actions">
@@ -33,6 +33,10 @@
 
             <button class="search-btn" onclick="SearchBar.toggle()">
               <i class="bi bi-search"></i>
+            </button>
+
+            <button class="actions" onclick="toggleActionsModal()">
+              <i class="bi bi-three-dots-vertical"></i>
             </button>
 
             <button class="settings" onclick="toggleSettingsModal()">
@@ -57,31 +61,57 @@
       <main>
         <div class="clock"></div>
         <div class="breadcrumbs"></div>
-        <div class="action-bar">
-          <button onclick="ItemModal.openCreate('shortcut')">
-            <i class="bi bi-plus-circle"></i>
-          </button>
-          <button onclick="ItemModal.openCreate('text')">
-            <i class="bi bi-file-earmark-plus"></i>
-          </button>
-          <button onclick="ItemModal.openCreate('folder')">
-            <i class="bi bi-folder-plus"></i>
-          </button>
-          <button class="edit" onclick="editItem()">
+
+        <div class="actions-bar">
+          <button class="edit-item" onclick="editItem()">
             <i class="bi bi-pencil"></i>
           </button>
-          <button class="delete" onclick="deleteItem()">
+          <button class="delete-item" onclick="deleteItem()">
             <i class="bi bi-trash"></i>
           </button>
-          <label class="move-left s-hidden" onclick="moveItem(-1)">
+          <label class="move-item-l s-hidden" onclick="moveItem(-1)">
             <i class="bi bi-caret-left-square"></i>
           </label>
-          <label class="move-right s-hidden" onclick="moveItem(1)">
+          <label class="move-item-r s-hidden" onclick="moveItem(1)">
             <i class="bi bi-caret-right-square"></i>
           </label>
         </div>
 
         <div class="item-container"></div>
+
+        <!-- Actions modal -->
+        <div class="actions-modal menu-modal modal hidden" onclick="toggleHide(this)">
+          <div class="container">
+            <div class="modal-content" onclick="stopPropagation(event)">
+              <button class="close" onclick="toggleActionsModal()">
+                <i class="bi bi-x-lg"></i>
+              </button>
+              <div class="header">
+                <div class="title">Actions</div>
+                <div class="subtitle">Manage your items</div>
+              </div>
+
+              <div class="item create-shortcut" onclick="ItemModal.openCreate('shortcut')">
+                <i class="bi bi-plus-circle"></i>
+                <div class="label">New shortcut</div>
+                <div class="arrow">›</div>
+              </div>
+
+              <div class="item create-text" onclick="ItemModal.openCreate('text')">
+                <i class="bi bi-file-earmark-plus"></i>
+                <div class="label">New text</div>
+                <div class="arrow">›</div>
+              </div>
+
+              <div class="item create-folder" onclick="ItemModal.openCreate('folder')">
+                <i class="bi bi-folder-plus"></i>
+                <div class="label">New folder</div>
+                <div class="arrow">›</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
 
         <!-- Item modal -->
         <div class="item-modal modal hidden" onclick="ItemModal.close()">
@@ -111,38 +141,36 @@
           </div>
         </div>
 
-        <div class="toast-container hidden"></div>
-
         <!-- Settings modal -->
-        <div class="settings-modal modal" hidden onclick="hide(this)">
+        <div class="settings-modal menu-modal modal hidden" onclick="toggleHide(this)">
           <div class="container">
             <div class="modal-content" onclick="stopPropagation(event)">
               <button class="close" onclick="toggleSettingsModal()">
                 <i class="bi bi-x-lg"></i>
               </button>
-              <div class="settings-header">
-                <div class="settings-title">Settings</div>
-                <div class="settings-subtitle">Customize your experience</div>
+              <div class="header">
+                <div class="title">Settings</div>
+                <div class="subtitle">Customize your experience</div>
               </div>
 
-              <label class="settings-item">
+              <label class="item">
                 <i class="bi bi-image"></i>
 
-                <div class="settings-label">
+                <div class="label">
                   Wallpaper
-                  <span class="settings-description"> Change your background </span>
+                  <span> Change your background </span>
                 </div>
 
                 <div class="arrow">›</div>
                 <input type="file" accept="image/*" hidden onchange="changeWallpaper(this.files[0])" />
               </label>
 
-              <label class="settings-item">
+              <label class="item">
                 <i class="bi bi-moon"></i>
 
-                <div class="settings-label">
+                <div class="label">
                   Dark theme
-                  <span class="settings-description theme-desc" id="themeText"> Enabled </span>
+                  <span class="theme-desc" id="themeText"> Enabled </span>
                 </div>
 
                 <label class="toggle">
@@ -151,23 +179,23 @@
                 </label>
               </label>
 
-              <label class="settings-item import">
+              <label class="item import">
                 <i class="bi bi-box-arrow-in-down"></i>
 
-                <div class="settings-label">
+                <div class="label">
                   Import
-                  <span class="settings-description"> Load your saved items </span>
+                  <span> Load your saved items </span>
                 </div>
 
                 <div class="arrow">›</div>
                 <input type="file" accept=".json" hidden onchange="importData(this.files[0])" />
               </label>
 
-              <div class="settings-item export" onclick="exportData()">
+              <div class="item export" onclick="exportData()">
                 <i class="bi bi-box-arrow-up"></i>
-                <div class="settings-label">
+                <div class="label">
                   Export
-                  <span class="settings-description"> Save your items </span>
+                  <span> Save your items </span>
                 </div>
 
                 <div class="arrow">›</div>
@@ -176,7 +204,8 @@
           </div>
         </div>
 
-        <div class="confirm-modal modal" onclick="ConfirmModal.close()" hidden>
+        <!-- Confirm modal -->
+        <div class="confirm-modal modal hidden" onclick="ConfirmModal.close()">
           <div class="modal-content" onclick="stopPropagation(event)">
             <button class="close" onclick="ConfirmModal.close()">
               <i class="bi bi-x-lg"></i>
@@ -190,6 +219,9 @@
             </div>
           </div>
         </div>
+        
+        <!-- Toast -->
+        <div class="toast-container hidden"></div>
       </main>
     </div>
   </body>

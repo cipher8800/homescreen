@@ -57,8 +57,8 @@ function download(url, name) {
   URL.revokeObjectURL(url);
 }
 
-function hide(element) {
-  element.hidden = !element.hidden;
+function toggleHide(element) {
+  element.classList.toggle("hidden");
 }
 
 function isValidUrl(value) {
@@ -67,5 +67,13 @@ function isValidUrl(value) {
     return true;
   } catch {
     return false;
+  }
+}
+
+function toggleFullscreen(force) {
+  if (document.fullscreenElement && force !== true) {
+    document.exitFullscreen();
+  } else if (force !== false) {
+    document.documentElement.requestFullscreen();
   }
 }

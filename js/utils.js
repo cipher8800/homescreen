@@ -18,6 +18,10 @@ function load(key, defaultValue) {
   return JSON.parse(savedValue);
 }
 
+function reset(key) {
+  localStorage.removeItem(`${projectName}_${key}`);
+}
+
 function generateId() {
   return Math.random().toString(36).slice(2, 11);
 }

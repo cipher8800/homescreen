@@ -1,5 +1,6 @@
-const header = document.querySelector("body .header");
+const navbar = document.querySelector(".navbar");
 const clockEl = document.querySelector(".clock");
+const actionBar = document.querySelector(".action-bar");
 const itemContainer = document.querySelector(".item-container");
 const breadcrumbs = document.querySelector(".breadcrumbs");
 const actionsModal = document.querySelector(".actions-modal");
@@ -11,20 +12,36 @@ let currentFolder = rootFolder;
 let darkTheme = load("darkTheme", true);
 let selectedItem = null;
 let currentWallpaper = null;
+let currentLogo = null;
+let isActionBarHidden = load("isActionBarHidden", false);
 
 document.addEventListener("DOMContentLoaded", () => {
   update();
+
+  actionsModal.querySelectorAll(".item").forEach((el) => {
+    el.addEventListener("click", toggleActionsModal);
+  });
 });
 
 async function update() {
   currentItems = (await DB.getItems("currentItems")) || [];
+  toggleActionBar(isActionBarHidden);
   displayItems();
   displayBreadcrumbs();
   toggleTheme(darkTheme);
+
+  // Load wallpaper
   DB.getItem("settings", "wallpaper").then((value) => {
     if (!value) return;
     currentWallpaper = value.value;
     updateWallpaper();
+  });
+
+  // Load logo
+  DB.getItem("settings", "logo").then((value) => {
+    if (!value) return;
+    currentLogo = value.value;
+    updateLogo();
   });
 }
 
@@ -68,7 +85,7 @@ async function deleteItem(itemId = selectedItem) {
   displayItems();
   Toast.show("Item has been successfully deleted");
 
-  return true
+  return true;
 }
 
 function sortItems(items) {
@@ -147,15 +164,15 @@ function deselectItem() {
 }
 
 function selectAdjacentItem(direction = 1) {
-  const sorted = sortItems(currentItems)
-  if (!selectedItem) selectedItem = sorted[0].id
+  const sorted = sortItems(currentItems);
+  if (!selectedItem) selectedItem = sorted[0].id;
 
-  const index = sorted.findIndex(item => item.id === selectedItem);
+  const index = sorted.findIndex((item) => item.id === selectedItem);
 
-  const item = sorted[index + direction]
-  if (!item) return
+  const item = sorted[index + direction];
+  if (!item) return;
 
-  selectItem(item.id)
+  selectItem(item.id);
 }
 
 function editItem() {
@@ -163,14 +180,10 @@ function editItem() {
   ItemModal.openUpdate(selectedItem);
 }
 
-function openFolder(ref) {
+function openFolder(folderId) {
   deselectItem();
-  if (Number.isFinite(ref)) {
-    currentFolder = currentItems[ref];
-  } else if (typeof ref === "string") {
-    currentFolder = currentItems.filter((item) => item.id === ref)[0];
-  }
-  if (!currentFolder) currentFolder = rootFolder;
+  const folder = currentItems.filter((item) => item.id === folderId)[0];
+  currentFolder = folder || rootFolder;
   displayItems();
   displayBreadcrumbs();
 }
@@ -187,9 +200,9 @@ function toggleTheme(force = undefined) {
 
 function displayBreadcrumbs() {
   breadcrumbs.innerHTML = "";
-  const isRoot = currentFolder.path.length <= 0
+  const isRoot = currentFolder.path.length <= 0;
   breadcrumbs.style.visibility = isRoot ? "hidden" : "";
-  if (isRoot) return
+  if (isRoot) return;
 
   breadcrumbs.innerHTML += currentFolder.path
     .map(
@@ -214,6 +227,23 @@ async function changeWallpaper(file) {
   updateWallpaper();
 }
 
+async function changeLogo(file) {
+  if (!file) return;
+
+  currentLogo = file;
+  await DB.putItem("settings", {
+    id: "logo",
+    value: file,
+  });
+
+  updateLogo();
+}
+
+function updateLogo() {
+  if (!currentLogo) return;
+  navbar.querySelector(".logo").innerHTML = `<img src="${URL.createObjectURL(currentLogo)}">`;
+}
+
 function updateWallpaper() {
   if (!currentWallpaper) return;
   document.body.style.background = `
@@ -224,7 +254,6 @@ function updateWallpaper() {
 }
 
 // Clock
-
 function updateClock() {
   const now = new Date();
 
@@ -274,6 +303,18 @@ async function importData(file) {
   update();
 }
 
+function toggleActionBar(force) {
+  isActionBarHidden = force != null ? force : !isActionBarHidden;
+  save("isActionBarHidden", isActionBarHidden);
+
+  actionBar.classList.toggle("hidden", isActionBarHidden);
+
+  const checkbox = document.querySelector(".action-bar-checkbox");
+  const descEl = document.querySelector(".action-bar-desc");
+  checkbox.checked = !isActionBarHidden;
+  descEl.textContent = isActionBarHidden ? "Disabled" : "Enabled";
+}
+
 function toggleActionsModal() {
   toggleHide(actionsModal);
 }
@@ -283,22 +324,32 @@ function toggleSettingsModal() {
 }
 
 function moveItem(direction = 1) {
-  const sorted = sortItems(currentItems)
-  const selected = sorted.find(item => item.id === selectedItem)
-  const target = sorted[sorted.indexOf(selected) + direction]
+  const sorted = sortItems(currentItems);
+  const selected = sorted.find((item) => item.id === selectedItem);
+  const target = sorted[sorted.indexOf(selected) + direction];
 
-  if (!selected || !target) return
+  if (!selected || !target) return;
 
-  const order = selected.order
-  selected.order = target.order
-  target.order = order
+  const order = selected.order;
+  selected.order = target.order;
+  target.order = order;
 
-  DB.putItem("currentItems", selected)
-  DB.putItem("currentItems", target)
+  DB.putItem("currentItems", selected);
+  DB.putItem("currentItems", target);
 
-  displayItems()
+  displayItems();
 }
 
+async function resetSettings() {
+  const confirmed = await ConfirmModal.confirmAction(`Reset settings?`, "This action cannot be undone.");
+  if (!confirmed) return;
+
+  await DB.deleteItem("settings", "wallpaper");
+  await DB.deleteItem("settings", "logo");
+  reset("darkTheme");
+  reset("isActionBarHidden");
+  location.reload();
+}
 
 const keyActions = {
   KeyF: toggleFullscreen,

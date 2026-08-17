@@ -18,8 +18,8 @@ const SearchBar = (() => {
   }
 
   function toggle() {
-    if (header.classList.contains("search")) clear();
-    header.classList.toggle("search");
+    if (navbar.classList.contains("search")) clear();
+    navbar.classList.toggle("search");
   }
 
   return { search, toggle, clear };

@@ -60,5 +60,10 @@ const DB = (() => {
     return handleRequest(() => store.delete(id));
   }
 
-  return { addItem, getItem, getItems, putItem, deleteItem };
+  async function clearStore(storeName) {
+    const store = await getStore(storeName);
+    return handleRequest(() => store.clear());
+  }
+
+  return { addItem, getItem, getItems, putItem, deleteItem, clearStore };
 })();

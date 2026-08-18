@@ -270,11 +270,10 @@ main {
   width: 100%;
 }
 
-.search-bar .exit,
-.search-bar .clear {
+.search-bar button {
   font-size: 1.5rem;
   background-color: transparent;
-  color: white;
+  color: var(--text-color);
 }
 
 .search-bar .search-box {
@@ -466,6 +465,11 @@ main {
 .menu-modal .item .arrow {
   color: var(--text-color);
   font-size: 22px;
+}
+
+.menu-modal .item input[type=number] {
+  width: 40px;
+  padding: 2px;
 }
 
 .toggle {

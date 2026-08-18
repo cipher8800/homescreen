@@ -5,6 +5,7 @@ const itemContainer = document.querySelector(".item-container");
 const breadcrumbs = document.querySelector(".breadcrumbs");
 const actionsModal = document.querySelector(".actions-modal");
 const settingsModal = document.querySelector(".settings-modal");
+const marginInput = settingsModal.querySelector(".item.margin input");
 
 const rootFolder = { id: null, name: "Root", path: [] };
 let currentItems = null;
@@ -14,6 +15,7 @@ let selectedItem = null;
 let currentWallpaper = null;
 let currentLogo = null;
 let isActionBarHidden = load("isActionBarHidden", false);
+let margin = load("margin", 0);
 
 document.addEventListener("DOMContentLoaded", () => {
   update();
@@ -29,6 +31,7 @@ async function update() {
   displayItems();
   displayBreadcrumbs();
   toggleTheme(darkTheme);
+  updateMargin();
 
   // Load wallpaper
   DB.getItem("settings", "wallpaper").then((value) => {
@@ -253,6 +256,19 @@ function updateWallpaper() {
   `;
 }
 
+function changeMargin(value) {
+  value = Math.max(0, Math.min(value, 500));
+  margin = value;
+  save("margin", margin);
+
+  updateMargin();
+}
+
+function updateMargin() {
+  marginInput.value = margin;
+  clockEl.style.marginBottom = `${margin}px`;
+}
+
 // Clock
 function updateClock() {
   const now = new Date();
@@ -296,11 +312,13 @@ async function importData(file) {
     throw new Error("Invalid backup file.");
   }
 
+  await DB.clearStore("currentItems");
+
   for (const item of data.currentItems) {
     await DB.putItem("currentItems", item);
   }
 
-  update();
+  location.reload();
 }
 
 function toggleActionBar(force) {
@@ -348,6 +366,8 @@ async function resetSettings() {
   await DB.deleteItem("settings", "logo");
   reset("darkTheme");
   reset("isActionBarHidden");
+  reset("margin");
+
   location.reload();
 }
 

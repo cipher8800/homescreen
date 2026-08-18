@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Homescreen</title>
+    <title>Home</title>
     <link rel="icon" href="favicon.png" type="image/x-icon" />
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
     <link href="vendor/bootstrap-icons-1.13.1/bootstrap-icons.min.css" rel="stylesheet" />
@@ -21,7 +21,7 @@
     <div class="app container">
       <header class="navbar">
         <div class="main-content">
-          <div class="logo" onclick="openFolder(null)">Homescreen</div>
+          <div class="logo" onclick="openFolder(null)">Home</div>
 
           <div class="actions">
             <label class="search search-box">
@@ -203,6 +203,17 @@
                   <input class="theme-checkbox" type="checkbox" onchange="toggleTheme()" />
                   <span class="slider"></span>
                 </label>
+              </label>
+
+              <label class="item margin">
+                <i class="bi bi-arrows-vertical"></i>
+
+                <div class="label">
+                  Margin
+                  <span class="theme-desc" id="themeText">Items margin</span>
+                </div>
+
+                <input type="number" min="0" max="500" onchange="changeMargin(this.value)">
               </label>
 
               <label class="item import">

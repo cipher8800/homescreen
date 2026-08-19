@@ -77,14 +77,21 @@ function updateItem(itemId, updates) {
 async function deleteItem(itemId = selectedItem) {
   if (!itemId) return false;
 
-  const item = currentItems.find((item) => item.id === itemId);
+  const targetItem = currentItems.find((item) => item.id === itemId);
+  if (!targetItem) return false;
 
-  const confirmed = await ConfirmModal.confirmAction(`Delete "${item.name}"?`, "This action cannot be undone.");
+  const confirmed = await ConfirmModal.confirmAction(`Delete "${targetItem.name}"?`, "This action cannot be undone.");
   if (!confirmed) return false;
 
-  currentItems = currentItems.filter((item) => !(item.id === itemId || item.path.some((item) => item.id === itemId)));
+  // Identify the target item AND all items nested under it
+  const idsToDelete = new Set(currentItems.filter((item) => item.id === itemId || item.path?.some((p) => p.id === itemId)).map((item) => item.id));
+
+  currentItems = currentItems.filter((item) => !idsToDelete.has(item.id));
+
+  // Remove all affected IDs from the Database
+  await Promise.all(Array.from(idsToDelete).map((id) => DB.deleteItem("currentItems", id)));
+
   deselectItem();
-  DB.deleteItem("currentItems", itemId);
   displayItems();
   Toast.show("Item has been successfully deleted");
 
@@ -379,7 +386,9 @@ const keyActions = {
 
 document.addEventListener("keydown", (event) => {
   const action = keyActions[event.code];
-  if (action) {
+  const isFocus = document.activeElement.matches("input, textarea");
+
+  if (action && !isFocus) {
     event.preventDefault();
     action();
   }

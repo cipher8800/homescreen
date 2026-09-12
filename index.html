@@ -7,7 +7,7 @@
     <link rel="icon" href="favicon.png" type="image/x-icon" />
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
     <link href="vendor/bootstrap-icons-1.13.1/bootstrap-icons.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/main.css" />
     <script src="js/constants.js" defer></script>
     <script src="js/db.js" defer></script>
     <script src="js/utils.js" defer></script>
@@ -35,11 +35,7 @@
               <i class="bi bi-search"></i>
             </button>
 
-            <button class="actions" onclick="toggleActionsModal()">
-              <i class="bi bi-three-dots-vertical"></i>
-            </button>
-
-            <button class="settings" onclick="toggleSettingsModal()">
+            <button class="settings" onclick="toggleModal('settings-modal')">
               <i class="bi bi-sliders2"></i>
             </button>
           </div>
@@ -77,38 +73,34 @@
           </label>
         </div>
 
-        <div class="item-container"></div>
+        <div class="items-grid"></div>
 
-        <!-- Actions modal -->
-        <div class="actions-modal menu-modal modal hidden" onclick="toggleHide(this)">
-          <div class="container">
-            <div class="modal-content" onclick="stopPropagation(event)">
-              <button class="close" onclick="toggleActionsModal()">
-                <i class="bi bi-x-lg"></i>
-              </button>
-              <div class="header">
-                <div class="title">Actions</div>
-                <div class="subtitle">Manage your items</div>
-              </div>
+        <!-- Create modal -->
+        <div class="create-modal menu-modal modal hidden" onclick="toggleModal('create-modal', false)">
+          <div class="modal-content" onclick="stopPropagation(event)">
+            <button class="close" onclick="toggleModal('create-modal')">
+              <i class="bi bi-x-lg"></i>
+            </button>
+            <div class="header">
+              <div class="title">Add item</div>
+            </div>
 
-              <div class="item create-shortcut" onclick="ItemModal.openCreate('shortcut')">
-                <i class="bi bi-plus-circle"></i>
-                <div class="label">New shortcut</div>
-                <div class="arrow">›</div>
-              </div>
+            <div class="item create-shortcut" onclick="ItemModal.openCreate('shortcut')">
+              <i class="bi bi-plus-circle"></i>
+              <div class="label">New shortcut</div>
+              <div class="arrow">›</div>
+            </div>
 
-              <div class="item create-text" onclick="ItemModal.openCreate('text')">
-                <i class="bi bi-file-earmark-plus"></i>
-                <div class="label">New text</div>
-                <div class="arrow">›</div>
-              </div>
+            <div class="item create-text" onclick="ItemModal.openCreate('text')">
+              <i class="bi bi-file-earmark-plus"></i>
+              <div class="label">New text</div>
+              <div class="arrow">›</div>
+            </div>
 
-              <div class="item create-folder" onclick="ItemModal.openCreate('folder')">
-                <i class="bi bi-folder-plus"></i>
-                <div class="label">New folder</div>
-                <div class="arrow">›</div>
-              </div>
-
+            <div class="item create-folder" onclick="ItemModal.openCreate('folder')">
+              <i class="bi bi-folder-plus"></i>
+              <div class="label">New folder</div>
+              <div class="arrow">›</div>
             </div>
           </div>
         </div>
@@ -132,7 +124,7 @@
 
             <input class="url-input" type="text" placeholder="Item url" />
 
-            <textarea class="content-input" placeholder="Enter your text here"></textarea>
+            <textarea spellcheck="false" class="content-input" placeholder="Enter your text here"></textarea>
 
             <div class="actions">
               <button class="submit button">Submit</button>
@@ -142,10 +134,10 @@
         </div>
 
         <!-- Settings modal -->
-        <div class="settings-modal menu-modal modal hidden" onclick="toggleHide(this)">
+        <div class="settings-modal menu-modal modal hidden" onclick="toggleModal('settings-modal', false)">
           <div class="container">
             <div class="modal-content" onclick="stopPropagation(event)">
-              <button class="close" onclick="toggleSettingsModal()">
+              <button class="close" onclick="toggleModal('settings-modal', false)">
                 <i class="bi bi-x-lg"></i>
               </button>
               <div class="header">
@@ -213,7 +205,7 @@
                   <span class="theme-desc" id="themeText">Items margin</span>
                 </div>
 
-                <input type="number" min="0" max="500" onchange="changeMargin(this.value)">
+                <input type="number" min="0" max="500" onchange="changeMargin(this.value)" />
               </label>
 
               <label class="item import">
@@ -247,7 +239,6 @@
 
                 <div class="arrow">›</div>
               </div>
-
             </div>
           </div>
         </div>
@@ -267,8 +258,7 @@
             </div>
           </div>
         </div>
-        
-        <!-- Toast -->
+
         <div class="toast-container hidden"></div>
       </main>
     </div>

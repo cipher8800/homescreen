@@ -6,22 +6,6 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Poppins";
-  src: url("../assets/fonts/Poppins-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Poppins";
-  src: url("../assets/fonts/Poppins-Italic.woff2") format("woff2");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
 :root {
   --bg-color: #ffffff;
   --text-color: #333;
@@ -83,6 +67,7 @@ button {
 }
 
 textarea {
+  font-family: "Poppins", sans-serif;
   padding: 5px;
   background-color: var(--label-color);
   color: var(--text-color);
@@ -128,6 +113,7 @@ textarea {
   padding: 0;
   background-color: transparent;
   color: var(--text-color);
+  font-size: 1.2rem;
 }
 
 .modal .actions {
@@ -280,7 +266,6 @@ main {
   flex: 1;
 }
 
-
 .action-bar {
   display: flex;
   align-items: center;
@@ -298,20 +283,20 @@ main {
   cursor: pointer;
 }
 
-.item-container {
+.items-grid {
   position: relative;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
   gap: 5px;
 }
 
-.item-container > .message {
+.items-grid > .message {
   position: absolute;
   top: 10px;
   left: 10px;
 }
 
-.item-container .item {
+.items-grid .item {
   padding: 5px;
   border: 1px solid transparent;
   border-radius: 5px;
@@ -319,27 +304,37 @@ main {
   height: max-content;
 }
 
-.item-container .item.selected {
+.items-grid .item.selected {
   border-color: var(--border-color);
 }
 
-.item-container .item * {
+.items-grid .item * {
   position: relative;
   width: 100%;
   margin-bottom: 2px;
 }
 
-.item-container .item img {
+.items-grid .item img {
   max-height: 100px;
   object-fit: contain;
 }
 
-.item-container .item p {
+.items-grid .item p {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 0.8rem;
   max-height: 40px;
   text-align: center;
+}
+
+.items-grid .add-btn {
+  background-color: transparent;
+  color: var(--text-color);
+  font-size: 2rem;
+}
+
+.create-modal .modal-content {
+  width: 300px;
 }
 
 .item-modal .name-input {
@@ -368,19 +363,27 @@ main {
 }
 
 .item-modal .content-input {
+  flex: 1;
   resize: none;
   height: 225px;
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 
-.folder-modal .icon-input {
-  display: inline-flex;
-  cursor: pointer;
+.item-modal.text-modal .modal-content {
+  width: 100%;
+  max-width: 1440px;
+  height: 100%;
+  border-radius: 0;
+  border: none;
 }
 
-.folder-modal .icon-input img {
-  width: 32px;
-  height: 32px;
+.settings-modal .modal-content {
+  transform: none;
+  top: 50px;
+  left: auto;
+  right: 50px;
+  gap: 5px;
+  width: 300px;
 }
 
 .toast-container {
@@ -403,15 +406,6 @@ main {
   border-radius: 5px;
   width: max-content;
   max-width: 100%;
-}
-
-.menu-modal .modal-content {
-  transform: none;
-  top: 50px;
-  left: auto;
-  right: 50px;
-  gap: 5px;
-  width: 300px;
 }
 
 .menu-modal .header {
@@ -467,7 +461,7 @@ main {
   font-size: 22px;
 }
 
-.menu-modal .item input[type=number] {
+.menu-modal .item input[type="number"] {
   width: 40px;
   padding: 2px;
 }

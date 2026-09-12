@@ -51,6 +51,7 @@ const ItemModal = (() => {
 
   function update() {
     const itemType = currentItem?.type || currentItemType || "text";
+    element.classList.toggle("text-modal", itemType === "text");
     iconInput.value = "";
     iconPreview.src = currentItem?.icon || `assets/images/${itemType}.png`;
     title.textContent = currentItem ? `Edit ${currentItem.name}` : `Create new ${itemType}`;

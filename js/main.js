@@ -1,9 +1,9 @@
 const navbar = document.querySelector(".navbar");
 const clockEl = document.querySelector(".clock");
 const actionBar = document.querySelector(".action-bar");
-const itemContainer = document.querySelector(".item-container");
+const itemsGrid = document.querySelector(".items-grid");
 const breadcrumbs = document.querySelector(".breadcrumbs");
-const actionsModal = document.querySelector(".actions-modal");
+const actionsModal = document.querySelector(".create-modal");
 const settingsModal = document.querySelector(".settings-modal");
 const marginInput = settingsModal.querySelector(".item.margin input");
 
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   update();
 
   actionsModal.querySelectorAll(".item").forEach((el) => {
-    el.addEventListener("click", toggleActionsModal);
+    el.addEventListener("click", ()=> toggleModal('create-modal', false));
   });
 });
 
@@ -106,18 +106,19 @@ function displayItems(items) {
   if (!items) items = currentItems.filter((item) => item.parentId === currentFolder.id);
 
   items = sortItems(items);
-  itemContainer.innerHTML =
-    items
-      .map(
-        (item) =>
-          `
+  itemsGrid.innerHTML = items
+    .map(
+      (item) =>
+        `
             <div class="item ${item.type} ${selectedItem === item.id ? "selected" : ""}" data-id="${item.id}" onclick="handleItem('${item.id}')">
               <img src="${getItemIcon(item)}">
               <p>${item.name}</p>
             </div>
           `,
-      )
-      .join("") || `<span class="message">No items found</span>`;
+    )
+    .join("");
+
+  itemsGrid.innerHTML += `<button class="add-btn" onclick="toggleModal('create-modal')"><i class="bi bi-plus-lg"></i></button>`;
 }
 
 function getItemIcon(item) {
@@ -340,12 +341,11 @@ function toggleActionBar(force) {
   descEl.textContent = isActionBarHidden ? "Disabled" : "Enabled";
 }
 
-function toggleActionsModal() {
-  toggleHide(actionsModal);
-}
-
-function toggleSettingsModal() {
-  toggleHide(settingsModal);
+function toggleModal(name, force) {
+  const element = document.querySelector(`.modal.${name}`)
+  if (!element) return
+  const shouldHide = force !== undefined ? !force : undefined
+  element.classList.toggle("hidden", shouldHide);
 }
 
 function moveItem(direction = 1) {

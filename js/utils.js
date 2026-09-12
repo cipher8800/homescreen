@@ -61,10 +61,6 @@ function download(url, name) {
   URL.revokeObjectURL(url);
 }
 
-function toggleHide(element) {
-  element.classList.toggle("hidden");
-}
-
 function isValidUrl(value) {
   try {
     new URL(value);

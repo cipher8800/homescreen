@@ -127,8 +127,10 @@
             <textarea spellcheck="false" class="content-input" placeholder="Enter your text here"></textarea>
 
             <div class="actions">
-              <button class="submit button">Submit</button>
-              <button class="delete button" onclick="deleteItem()">Delete</button>
+              <button class="button listen-btn"><i class="bi bi-volume-up"></i> Listen</button>
+              <button class="button copy-btn" onclick="ItemModal.copyText()"><i class="bi bi-copy"></i> Copy</button>
+              <button class="button submit-btn"><i class="bi bi-check2"></i> Submit</button>
+              <button class="button delete-btn" onclick="deleteItem()"><i class="bi bi-trash"></i> Delete</button>
             </div>
           </div>
         </div>
@@ -173,12 +175,12 @@
                 <i class="bi bi-tools"></i>
 
                 <div class="label">
-                  Action bar
+                  Actions UI
                   <span class="action-bar-desc">Enabled</span>
                 </div>
 
                 <label class="toggle">
-                  <input class="action-bar-checkbox" type="checkbox" onchange="toggleActionBar()" />
+                  <input class="action-bar-checkbox" type="checkbox" onchange="toggleActions()" />
                   <span class="slider"></span>
                 </label>
               </label>

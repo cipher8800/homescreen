@@ -14,22 +14,22 @@ let darkTheme = load("darkTheme", true);
 let selectedItem = null;
 let currentWallpaper = null;
 let currentLogo = null;
-let isActionBarHidden = load("isActionBarHidden", false);
+let isActionsHidden = load("isActionsHidden", false);
 let margin = load("margin", 0);
 
 document.addEventListener("DOMContentLoaded", () => {
-  update();
+  updateUI();
 
   actionsModal.querySelectorAll(".item").forEach((el) => {
     el.addEventListener("click", ()=> toggleModal('create-modal', false));
   });
 });
 
-async function update() {
+async function updateUI() {
   currentItems = (await DB.getItems("currentItems")) || [];
-  toggleActionBar(isActionBarHidden);
   displayItems();
   displayBreadcrumbs();
+  toggleActions(isActionsHidden);
   toggleTheme(darkTheme);
   updateMargin();
 
@@ -60,7 +60,7 @@ function createItem(itemData) {
 
   selectedItem = itemData.id;
   displayItems();
-  Toast.show("Item has been successfully created");
+  Toast.show("Item created successfully.");
 }
 
 function updateItem(itemId, updates) {
@@ -71,7 +71,7 @@ function updateItem(itemId, updates) {
   currentItems = currentItems.map((item) => (item.id === itemId ? updatedItem : item));
   DB.putItem("currentItems", updatedItem);
   displayItems();
-  Toast.show("Item has been successfully updated");
+  Toast.show("Item updated successfully.");
 }
 
 async function deleteItem(itemId = selectedItem) {
@@ -93,7 +93,7 @@ async function deleteItem(itemId = selectedItem) {
 
   deselectItem();
   displayItems();
-  Toast.show("Item has been successfully deleted");
+  Toast.show("Item deleted successfully.");
 
   return true;
 }
@@ -329,16 +329,17 @@ async function importData(file) {
   location.reload();
 }
 
-function toggleActionBar(force) {
-  isActionBarHidden = force != null ? force : !isActionBarHidden;
-  save("isActionBarHidden", isActionBarHidden);
+function toggleActions(force) {
+  isActionsHidden = force != null ? force : !isActionsHidden;
+  save("isActionBarHidden", isActionsHidden);
 
-  actionBar.classList.toggle("hidden", isActionBarHidden);
+  actionBar.classList.toggle("hidden", isActionsHidden);
+  itemsGrid.querySelector(".add-btn").classList.toggle("hidden", isActionsHidden);
 
   const checkbox = document.querySelector(".action-bar-checkbox");
   const descEl = document.querySelector(".action-bar-desc");
-  checkbox.checked = !isActionBarHidden;
-  descEl.textContent = isActionBarHidden ? "Disabled" : "Enabled";
+  checkbox.checked = !isActionsHidden;
+  descEl.textContent = isActionsHidden ? "Disabled" : "Enabled";
 }
 
 function toggleModal(name, force) {

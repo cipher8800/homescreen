@@ -125,7 +125,7 @@ textarea {
   flex: 1;
 }
 
-.modal .delete {
+.modal .delete-btn {
   background-color: var(--red);
 }
 
@@ -286,40 +286,35 @@ main {
 .items-grid {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
   gap: 5px;
-}
-
-.items-grid > .message {
-  position: absolute;
-  top: 10px;
-  left: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  grid-auto-rows: minmax(100px, auto);
 }
 
 .items-grid .item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  height: 100%;
   padding: 5px;
   border: 1px solid transparent;
   border-radius: 5px;
   cursor: pointer;
-  height: max-content;
 }
 
 .items-grid .item.selected {
   border-color: var(--border-color);
 }
 
-.items-grid .item * {
-  position: relative;
-  width: 100%;
-  margin-bottom: 2px;
-}
-
 .items-grid .item img {
-  max-height: 100px;
+  width: 100%;
+  aspect-ratio: 1;
   object-fit: contain;
 }
 
 .items-grid .item p {
+  width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 0.8rem;
@@ -328,6 +323,8 @@ main {
 }
 
 .items-grid .add-btn {
+  width: 100%;
+  height: 100%;
   background-color: transparent;
   color: var(--text-color);
   font-size: 2rem;
@@ -369,7 +366,7 @@ main {
   font-size: 1.1rem;
 }
 
-.item-modal.text-modal .modal-content {
+.text-modal .modal-content {
   width: 100%;
   max-width: 1440px;
   height: 100%;
@@ -381,7 +378,7 @@ main {
   transform: none;
   top: 50px;
   left: auto;
-  right: 50px;
+  right: 20px;
   gap: 5px;
   width: 300px;
 }
@@ -512,9 +509,7 @@ main {
 
 /* Medium screens (Tablets, up to 768px wide) */
 @media (max-width: 768px) {
-  .menu-modal .modal-content {
-    right: 20px;
-  }
+ 
 }
 
 /* Small screens (Phones, up to 480px wide) */
@@ -539,7 +534,7 @@ main {
     display: flex;
   }
 
-  .menu-modal .modal-content {
+  .settings-modal .modal-content {
     bottom: auto;
     top: 50px;
     left: 50%;

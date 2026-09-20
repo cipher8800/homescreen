@@ -6,8 +6,10 @@ const ItemModal = (() => {
   const contentInput = element.querySelector(".content-input");
   const iconInput = element.querySelector(".icon-input input");
   const iconPreview = element.querySelector(".icon-input img");
-  const submitBtn = element.querySelector(".submit");
-  const deleteBtn = element.querySelector(".delete");
+  const submitBtn = element.querySelector(".submit-btn");
+  const deleteBtn = element.querySelector(".delete-btn");
+  const listenBtn = element.querySelector(".listen-btn");
+  const copyBtn = element.querySelector(".copy-btn");
 
   let currentItem = null;
   let currentItemType = "text";
@@ -58,10 +60,10 @@ const ItemModal = (() => {
     nameInput.value = currentItem ? currentItem.name : createItemName(`New ${itemType}`);
     urlInput.classList.toggle("hidden", itemType !== "shortcut");
     urlInput.value = currentItem ? currentItem.url : "";
-    contentInput.classList.toggle("hidden", itemType !== "text");
+    [contentInput, listenBtn, copyBtn].forEach((el) => el.classList.toggle("hidden", itemType !== "text"));
     contentInput.value = currentItem ? currentItem.content : "";
 
-    submitBtn.textContent = currentItem ? "Update" : "Create";
+    submitBtn.innerHTML = currentItem ? `<i class="bi bi-check2"></i> Update` : `<i class="bi bi-plus-lg"></i> Create`;
     deleteBtn.classList.toggle("hidden", currentItem == null);
   }
 
@@ -103,5 +105,15 @@ const ItemModal = (() => {
     return name;
   }
 
-  return { openCreate, openUpdate, close };
+  async function copyText() {
+    // Select the text inside the textarea for visual feedback
+    contentInput.select();
+    contentInput.setSelectionRange(0, 99999); // For mobile devices
+
+    // Write the text to the clipboard
+    await navigator.clipboard.writeText(contentInput.value);
+    Toast.show("Text copied successfully!");
+  }
+
+  return { openCreate, openUpdate, close, copyText };
 })();

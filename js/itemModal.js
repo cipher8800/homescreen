@@ -105,6 +105,13 @@ const ItemModal = (() => {
     return name;
   }
 
+  function listenText() {
+    const text = contentInput.value.trim();
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    window.speechSynthesis.speak(utterance);
+  }
+
   async function copyText() {
     // Select the text inside the textarea for visual feedback
     contentInput.select();
@@ -115,5 +122,5 @@ const ItemModal = (() => {
     Toast.show("Text copied successfully!");
   }
 
-  return { openCreate, openUpdate, close, copyText };
+  return { openCreate, openUpdate, close, listenText, copyText };
 })();

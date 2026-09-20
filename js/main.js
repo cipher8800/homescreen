@@ -1,3 +1,4 @@
+const dropZone = document.querySelector(".drop-zone");
 const navbar = document.querySelector(".navbar");
 const clockEl = document.querySelector(".clock");
 const actionBar = document.querySelector(".action-bar");
@@ -21,9 +22,37 @@ document.addEventListener("DOMContentLoaded", () => {
   updateUI();
 
   actionsModal.querySelectorAll(".item").forEach((el) => {
-    el.addEventListener("click", ()=> toggleModal('create-modal', false));
+    el.addEventListener("click", () => toggleModal("create-modal", false));
   });
 });
+
+async function createItemData(item = {}) {
+  const itemData = {
+    id: item.id || generateId(),
+    order: currentItems.reduce((max, item) => Math.max(max, item.order), 0) + 1,
+    name: item.name || "",
+    type: item.type,
+    parentId: item.parentId || currentFolder.id,
+    path: item.path || [...currentFolder.path, { id: currentFolder.id, name: currentFolder.name }],
+    icon: item.icon || null,
+    lastModified: Date.now(),
+  };
+
+  switch (item.type) {
+    case "shortcut":
+      itemData.url = item.url || "";
+      break;
+    case "text":
+      itemData.content = item.content || "";
+      break;
+    case "folder":
+      break;
+    default:
+      break;
+  }
+
+  return itemData;
+}
 
 async function updateUI() {
   currentItems = (await DB.getItems("currentItems")) || [];
@@ -343,9 +372,9 @@ function toggleActions(force) {
 }
 
 function toggleModal(name, force) {
-  const element = document.querySelector(`.modal.${name}`)
-  if (!element) return
-  const shouldHide = force !== undefined ? !force : undefined
+  const element = document.querySelector(`.modal.${name}`);
+  if (!element) return;
+  const shouldHide = force !== undefined ? !force : undefined;
   element.classList.toggle("hidden", shouldHide);
 }
 
@@ -377,6 +406,44 @@ async function resetSettings() {
   reset("margin");
 
   location.reload();
+}
+
+dropZone.ondragover = (e) => {
+  e.preventDefault();
+  dropZone.classList.add("dragover");
+};
+
+dropZone.ondragleave = () => dropZone.classList.remove("dragover");
+
+dropZone.ondrop = (e) => {
+  e.preventDefault();
+  dropZone.classList.remove("dragover");
+  if (e.dataTransfer.files.length <= 0) return;
+  uploadFiles(e.dataTransfer.files);
+};
+
+async function uploadFile(file) {
+  const extension = getFileExtension(file);
+  const type = extension === ".url" ? "shortcut" : "text";
+  const content = await getFileText(file);
+
+  const itemData = await createItemData({ name: getFileName(file), type: type });
+
+  if (type === "shortcut") {
+    // Matches "URL=" and captures everything until the end of the line
+    const match = content.match(/^URL=(.+)$/m);
+    const url = match ? match[1].trim() : null;
+
+    itemData.url = url
+  } else {
+    itemData.content = content
+  }
+
+  createItem(itemData);
+}
+
+function uploadFiles(files) {
+  Array.from(files).forEach((file) => uploadFile(file));
 }
 
 const keyActions = {

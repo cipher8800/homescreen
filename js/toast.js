@@ -1,26 +1,31 @@
 const Toast = (() => {
-  const container = document.querySelector(".toast-container");
-  let currentItems = [];
+  const element = document.querySelector(".toast");
 
-  function show(message) {
-    if (!message) return;
-    const item = generateId();
-    currentItems.push(item);
-    container.innerHTML += `
-      <div class="toast" data-toast="${item}">
+  currentItems = [];
+  max = 5;
+  time = 3;
+
+  async function show(message) {
+    element.classList.remove("hidden");
+    const id = generateId();
+
+    element.insertAdjacentHTML(
+      "beforeend",
+      `
+      <div data-id="${id}" class="item">
         ${message}
       </div>
-    `;
-    container.classList.remove("hidden");
+    `
+    );
+    const itemEl = element.querySelector(`[data-id="${id}"]`);
 
-    setTimeout(() => {
-      const itemEl = container.querySelector(`[data-toast="${item}"]`);
-      itemEl.remove();
-      const itemToRemove = item;
-      currentItems = currentItems.filter((item) => item !== itemToRemove);
-      if (currentItems.length <= 0) container.classList.add("hidden");
-    }, 3000);
+    if (element.children.length > max) element.children[0].remove();
+
+    await sleep(1000 * time);
+
+    itemEl.remove();
+    if (element.children.length <= 0) element.classList.add("hidden");
   }
 
-  return { show };
+  return { show }
 })();

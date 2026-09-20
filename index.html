@@ -17,7 +17,7 @@
     <script src="js/searchBar.js" defer></script>
     <script src="js/toast.js" defer></script>
   </head>
-  <body>
+  <body class="drop-zone">
     <div class="app container">
       <header class="navbar">
         <div class="main-content">
@@ -65,6 +65,10 @@
           <button class="delete-item" onclick="deleteItem()">
             <i class="bi bi-trash"></i>
           </button>
+          <label class="create-text">
+            <i class="bi bi-file-earmark-arrow-up"></i>
+            <input type="file" accept="text/*" oninput="uploadFiles(this.files)" multiple hidden />
+          </label>
           <label class="move-item-l" onclick="moveItem(-1)">
             <i class="bi bi-caret-left-square"></i>
           </label>
@@ -127,7 +131,7 @@
             <textarea spellcheck="false" class="content-input" placeholder="Enter your text here"></textarea>
 
             <div class="actions">
-              <button class="button listen-btn"><i class="bi bi-volume-up"></i> Listen</button>
+              <button class="button listen-btn" onclick="ItemModal.listenText()"><i class="bi bi-volume-up"></i> Listen</button>
               <button class="button copy-btn" onclick="ItemModal.copyText()"><i class="bi bi-copy"></i> Copy</button>
               <button class="button submit-btn"><i class="bi bi-check2"></i> Submit</button>
               <button class="button delete-btn" onclick="deleteItem()"><i class="bi bi-trash"></i> Delete</button>
@@ -164,7 +168,7 @@
 
                 <div class="label">
                   Logo
-                  <span>Make it yours</span>
+                  <span>Change the main logo</span>
                 </div>
 
                 <div class="arrow">›</div>
@@ -261,8 +265,12 @@
           </div>
         </div>
 
-        <div class="toast-container hidden"></div>
+        <div class="toast hidden"></div>
       </main>
+
+      <div class="drop-modal">
+        <div class="msg-box">Upload a text file</div>
+      </div>
     </div>
   </body>
 </html>

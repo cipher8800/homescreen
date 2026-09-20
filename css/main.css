@@ -383,7 +383,7 @@ main {
   width: 300px;
 }
 
-.toast-container {
+.toast {
   pointer-events: none;
   position: fixed;
   top: 0;
@@ -396,7 +396,7 @@ main {
   padding: 10px;
 }
 
-.toast {
+.toast > * {
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   padding: 12px 20px;
@@ -505,6 +505,29 @@ main {
 
 .confirm-modal .actions .confirm {
   background-color: var(--red);
+}
+
+.drop-modal {
+  pointer-events: none;
+  display: none;
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.drop-zone.dragover .drop-modal {
+  display: block;
+}
+
+.drop-modal .msg-box {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px;
+  border-radius: 10px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 /* Medium screens (Tablets, up to 768px wide) */

@@ -8,6 +8,11 @@ function stopPropagation(event) {
   event.stopPropagation();
 }
 
+function sleep(ms) {
+  if (ms <= 0) return Promise.resolve();
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 function save(key, value) {
   localStorage.setItem(`${projectName}_${key}`, JSON.stringify(value));
 }
@@ -26,10 +31,6 @@ function generateId() {
   return Math.random().toString(36).slice(2, 11);
 }
 
-function getFileName(file) {
-  return decodeURIComponent(file.name).split("/").pop().split(".").slice(0, -1).join(".");
-}
-
 function getFileDataUrl(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -46,6 +47,21 @@ function getFileText(file) {
     reader.onerror = (error) => reject(error);
     reader.readAsText(file);
   });
+}
+
+function getFileExtension(file) {
+  const fileName = file.name;
+  const lastDot = fileName.lastIndexOf(".");
+  
+  return lastDot === -1 ? "" : fileName.slice(lastDot);
+}
+
+function getFileName(file) {
+  const fileName = file.name
+  const lastDotIndex = fileName.lastIndexOf('.');
+  if (lastDotIndex <= 0) return fileName;
+  
+  return fileName.slice(0, lastDotIndex);
 }
 
 function download(url, name) {

@@ -22,22 +22,6 @@ const ItemModal = (() => {
   submitBtn.onclick = handleSubmit;
   deleteBtn.onclick = handleDelete;
 
-  async function createItemData(item = {}) {
-    const itemData = {
-      id: item.id || generateId(),
-      order: currentItems.reduce((max, item) => Math.max(max, item.order), 0) + 1,
-      name: nameInput.value,
-      type: item.type || currentItemType,
-      parentId: item.parentId || currentFolder.id,
-      path: item.path || [...currentFolder.path, { id: currentFolder.id, name: currentFolder.name }],
-      url: urlInput.value,
-      content: contentInput.value,
-      icon: iconInput.value ? await getFileDataUrl(iconInput.files[0]) : item.icon || null,
-      lastModified: Date.now(),
-    };
-    return itemData;
-  }
-
   function openCreate(itemType = "text") {
     currentItemType = itemType;
     update();
@@ -75,7 +59,16 @@ const ItemModal = (() => {
         return;
       }
     }
-    const itemData = await createItemData(currentItem || {});
+
+    let itemData = {
+      name: nameInput.value,
+      type: currentItemType,
+      url: urlInput.value,
+      content: contentInput.value,
+      icon: iconInput.value ? await getFileDataUrl(iconInput.files[0]) : currentItem?.icon || null,
+    };
+
+    itemData = await createItemData({ ...currentItem, ...itemData });
     currentItem ? updateItem(currentItem.id, itemData) : createItem(itemData);
     close();
   }

@@ -14,17 +14,17 @@ function sleep(ms) {
 }
 
 function save(key, value) {
-  localStorage.setItem(`${projectName}_${key}`, JSON.stringify(value));
+  localStorage.setItem(`${PROJECT_NAME}_${key}`, JSON.stringify(value));
 }
 
 function load(key, defaultValue) {
-  const savedValue = localStorage.getItem(`${projectName}_${key}`);
+  const savedValue = localStorage.getItem(`${PROJECT_NAME}_${key}`);
   if (savedValue == null) return defaultValue;
   return JSON.parse(savedValue);
 }
 
 function reset(key) {
-  localStorage.removeItem(`${projectName}_${key}`);
+  localStorage.removeItem(`${PROJECT_NAME}_${key}`);
 }
 
 function generateId() {

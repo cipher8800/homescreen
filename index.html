@@ -69,6 +69,9 @@
             <i class="bi bi-file-earmark-arrow-up"></i>
             <input type="file" accept="text/*" oninput="uploadFiles(this.files)" multiple hidden />
           </label>
+          <button class="download-text" onclick="downloadItem()">
+            <i class="bi bi-file-earmark-arrow-down"></i>
+          </button>
           <label class="move-item-l" onclick="moveItem(-1)">
             <i class="bi bi-caret-left-square"></i>
           </label>
@@ -179,7 +182,7 @@
                 <i class="bi bi-tools"></i>
 
                 <div class="label">
-                  Actions UI
+                  Editor UI
                   <span class="action-bar-desc">Enabled</span>
                 </div>
 

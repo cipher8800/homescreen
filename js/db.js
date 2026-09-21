@@ -1,5 +1,5 @@
 const DB = (() => {
-  const DB_NAME = projectName;
+  const DB_NAME = PROJECT_NAME;
   const DB_VERSION = 1;
   const STORES = ["currentItems", "settings"];
 
@@ -50,6 +50,10 @@ const DB = (() => {
     return handleRequest(() => store.add(item));
   }
 
+  async function addItems(storeName, items) {
+    return Promise.all(items.map((item) => addItem(storeName, item)));
+  }
+
   async function putItem(storeName, item) {
     const store = await getStore(storeName);
     return handleRequest(() => store.put(item));
@@ -65,5 +69,5 @@ const DB = (() => {
     return handleRequest(() => store.clear());
   }
 
-  return { addItem, getItem, getItems, putItem, deleteItem, clearStore };
+  return { addItem, addItems, getItem, getItems, putItem, deleteItem, clearStore };
 })();

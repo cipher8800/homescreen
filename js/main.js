@@ -9,7 +9,8 @@ const settingsModal = document.querySelector(".settings-modal");
 const marginInput = settingsModal.querySelector(".item.margin input");
 
 const rootFolder = { id: null, name: "Root", path: [] };
-let currentItems = null;
+const isInitialized = load("isInitialized", false);
+let currentItems = [];
 let currentFolder = rootFolder;
 let darkTheme = load("darkTheme", true);
 let selectedItem = null;
@@ -18,13 +19,26 @@ let currentLogo = null;
 let isActionsHidden = load("isActionsHidden", false);
 let margin = load("margin", 0);
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadItems();
+
   updateUI();
 
   actionsModal.querySelectorAll(".item").forEach((el) => {
     el.addEventListener("click", () => toggleModal("create-modal", false));
   });
 });
+
+async function loadItems() {
+  if (!isInitialized) {
+    currentItems = INITIAL_ITEMS;
+
+    await DB.addItems("currentItems", currentItems);
+    save("isInitialized", true);
+  } else {
+    currentItems = await DB.getItems("currentItems");
+  }
+}
 
 async function createItemData(item = {}) {
   const itemData = {
@@ -45,8 +59,6 @@ async function createItemData(item = {}) {
     case "text":
       itemData.content = item.content || "";
       break;
-    case "folder":
-      break;
     default:
       break;
   }
@@ -54,8 +66,7 @@ async function createItemData(item = {}) {
   return itemData;
 }
 
-async function updateUI() {
-  currentItems = (await DB.getItems("currentItems")) || [];
+function updateUI() {
   displayItems();
   displayBreadcrumbs();
   toggleActions(isActionsHidden);
@@ -434,9 +445,9 @@ async function uploadFile(file) {
     const match = content.match(/^URL=(.+)$/m);
     const url = match ? match[1].trim() : null;
 
-    itemData.url = url
-  } else {
-    itemData.content = content
+    itemData.url = url;
+  } else if (type === "text") {
+    itemData.content = content;
   }
 
   createItem(itemData);
@@ -444,6 +455,15 @@ async function uploadFile(file) {
 
 function uploadFiles(files) {
   Array.from(files).forEach((file) => uploadFile(file));
+}
+
+function downloadItem() {
+  const item = currentItems.find((item) => item.id === selectedItem);
+  const fileName = `${item.name}.txt`;
+  const content = item.type === "shortcut" ? `[InternetShortcut]\r\nURL=${item.url}\r\n` : item.content;
+  const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  download(url, fileName);
 }
 
 const keyActions = {

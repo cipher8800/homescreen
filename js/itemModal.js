@@ -52,24 +52,22 @@ const ItemModal = (() => {
   }
 
   async function handleSubmit() {
-    if (iconInput.value) {
-      const file = iconInput.files[0];
-      if (file.size > 5 * 1024 * 1024) {
-        Toast.show("Upload failed: That file exceeds 5MB limit");
-        return;
-      }
-    }
-
     let itemData = {
       name: nameInput.value,
-      type: currentItemType,
+      type: currentItem?.type || currentItemType,
       url: urlInput.value,
       content: contentInput.value,
-      icon: iconInput.value ? await getFileDataUrl(iconInput.files[0]) : currentItem?.icon || null,
+      icon: iconInput.value ? await handleImageFile(iconInput.files[0], 128) : currentItem?.icon || null,
     };
 
-    itemData = await createItemData({ ...currentItem, ...itemData });
-    currentItem ? updateItem(currentItem.id, itemData) : createItem(itemData);
+    if (currentItem) {
+      itemData = await createItemData({ ...currentItem, ...itemData });
+      updateItem(currentItem.id, itemData);
+    } else {
+      itemData = await createItemData(itemData);
+      createItem(itemData);
+    }
+
     close();
   }
 

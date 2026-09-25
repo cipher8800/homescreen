@@ -116,6 +116,12 @@ textarea {
   font-size: 1.2rem;
 }
 
+.modal .title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .modal .actions {
   display: flex;
   gap: 5px;
@@ -215,6 +221,10 @@ body {
   padding: 0;
   border: none;
   color: #333;
+}
+
+.search-box .clear-btn {
+  cursor: pointer;
 }
 
 main {
@@ -461,6 +471,9 @@ main {
 .menu-modal .item input[type="number"] {
   width: 40px;
   padding: 2px;
+  background-color: var(--label-color);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .toggle {

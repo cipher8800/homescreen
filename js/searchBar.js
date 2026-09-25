@@ -1,7 +1,7 @@
 const SearchBar = (() => {
   const element = document.querySelector(".search-bar");
   const searchBoxes = document.querySelectorAll(".search-box");
-  const clearBtns = document.querySelectorAll(".search .clear");
+  const clearBtns = document.querySelectorAll(".search .clear-btn");
 
   function search(terms) {
     const items = currentItems.filter((item) => item.parentId === currentFolder.id);

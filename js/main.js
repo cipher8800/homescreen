@@ -43,7 +43,7 @@ async function loadItems() {
 async function createItemData(item = {}) {
   const itemData = {
     id: item.id || generateId(),
-    order: currentItems.reduce((max, item) => Math.max(max, item.order), 0) + 1,
+    order: item.order || currentItems.reduce((max, item) => Math.max(max, item.order), 0) + 1,
     name: item.name || "",
     type: item.type,
     parentId: item.parentId || currentFolder.id,

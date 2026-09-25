@@ -26,7 +26,7 @@
           <div class="actions">
             <label class="search search-box">
               <input type="text" oninput="SearchBar.search(event.target.value)" placeholder="Type to search..." />
-              <div class="clear" onclick="SearchBar.clear()">
+              <div class="clear-btn" onclick="SearchBar.clear()">
                 <i class="bi bi-search"></i>
               </div>
             </label>
@@ -48,7 +48,7 @@
           <label class="search-box">
             <input type="text" oninput="SearchBar.search(event.target.value)" placeholder="Type to search..." />
           </label>
-          <button onclick="SearchBar.clear()" class="clear">
+          <button onclick="SearchBar.clear()" class="clear-btn">
             <i class="bi bi-search"></i>
           </button>
         </div>
@@ -214,7 +214,7 @@
                   <span class="theme-desc" id="themeText">Items margin</span>
                 </div>
 
-                <input type="number" min="0" max="500" onchange="changeMargin(this.value)" />
+                <input type="number" min="0" max="500" onchange="changeMargin(this.value)" onfocus="this.select()" />
               </label>
 
               <label class="item import">

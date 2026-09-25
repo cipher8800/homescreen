@@ -93,3 +93,35 @@ function toggleFullscreen(force) {
     document.documentElement.requestFullscreen();
   }
 }
+
+async function handleImageFile(file, maxSize = 128) {
+  const dataUrl = await getFileDataUrl(file);
+  const img = await loadImage(dataUrl);
+
+  let width = img.width;
+  let height = img.height;
+
+  if (width > height) {
+    if (width > maxSize) {
+      height = Math.round((height * maxSize) / width);
+      width = maxSize;
+    }
+  } else {
+    if (height > maxSize) {
+      width = Math.round((width * maxSize) / height);
+      height = maxSize;
+    }
+  }
+
+  // Draw on standard HTML canvas
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0, width, height);
+
+  // Return Data URL (base64 string) directly
+  const mimeType = file?.type || file?.mimeType || "image/png";
+  return canvas.toDataURL(mimeType);
+}
